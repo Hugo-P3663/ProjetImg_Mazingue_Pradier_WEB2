@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+  </head>
+  <body>
+    <h2>Accueil</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {{ form }}
+      <button type="submit">Importer l'image</button>
+    </form>
+
+    {% for image in images %}
+    <div>
+      <img src="{{ image.original_image.url }}" alt="Original Image" />
+      <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
+    </div>
+    {% endfor %}
+  </body>
+</html>

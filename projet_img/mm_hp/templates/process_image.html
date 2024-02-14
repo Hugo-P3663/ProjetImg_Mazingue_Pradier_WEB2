@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processed Image</title>
+  </head>
+  <body>
+    <!-- Affichage de l'image originale -->
+    <h2>Original Image</h2>
+    <img src="{{ image.original_image.url }}" alt="Original Image" />
+
+    <!-- Affichage de l'image modifiée en noir et blanc -->
+    {% if image.black_and_white_image %}
+    <h2>Black and White Image</h2>
+    <img
+      src="{{ image.black_and_white_image.url }}"
+      alt="Black and White Image"
+    />
+    {% endif %}
+
+    <!-- Affichage de l'image redimensionnée -->
+    {% if image.resized_image %}
+    <h2>Resized Image</h2>
+    <img src="{{ image.resized_image.url }}" alt="Resized Image" />
+    {% endif %}
+
+    <!-- Formulaire pour effectuer d'autres modifications -->
+    <h2>Modify Image</h2>
+    <form action="{% url 'process_image' image_id=image.id %}" method="post">
+      {% csrf_token %}
+      <label for="action">Choose Action:</label>
+      <select name="action" id="action">
+        <option value="convert_bw">Convert to Black and White</option>
+        <option value="resize">Resize</option></select
+      ><br /><br />
+      <label for="width">Width:</label>
+      <input type="text" name="width" id="width" /><br /><br />
+      <label for="height">Height:</label>
+      <input type="text" name="height" id="height" /><br /><br />
+      <input type="submit" value="Apply Changes" />
+    </form>
+  </body>
+</html>
