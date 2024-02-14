@@ -10,6 +10,12 @@
     <h2>Original Image</h2>
     <img src="{{ image.original_image.url }}" alt="Original Image" />
 
+    <!-- Affichage de l'image en nuances de gris -->
+    {% if image.grayscale_image %}
+    <h2>Grayscale Image</h2>
+    <img src="{{ image.grayscale_image.url }}" alt="Grayscale Image" />
+    {% endif %}
+
     <!-- Affichage de l'image modifiée en noir et blanc -->
     {% if image.black_and_white_image %}
     <h2>Black and White Image</h2>
@@ -32,7 +38,14 @@
       <label for="action">Choose Action:</label>
       <select name="action" id="action">
         <option value="convert_bw">Convert to Black and White</option>
+        <option value="apply_filter">Apply Filter (Grayscale)</option>
         <option value="resize">Resize</option></select
+      ><br /><br />
+      <label for="filter_type">Choose Grayscale Filter:</label>
+      <select name="filter_type" id="filter_type">
+        <option value="SHARPEN">Sharpen</option>
+        <option value="EMBOSS">Emboss</option>
+        <option value="FIND_EDGES">Find Edges</option></select
       ><br /><br />
       <label for="width">Width:</label>
       <input type="text" name="width" id="width" /><br /><br />

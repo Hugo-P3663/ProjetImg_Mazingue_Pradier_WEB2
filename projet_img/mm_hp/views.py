@@ -17,10 +17,15 @@ def home(request):
 
 def process_image(request, image_id):
     image = ImageModel.objects.get(pk=image_id)
+    
     if request.method == 'POST':
         action = request.POST.get('action')
+
         if action == 'convert_bw':
             apply_black_and_white(image)
+        elif action == 'apply_filter':
+            filter_type = request.POST.get('filter_type')
+            apply_grayscale_filter(image, filter_type)
         elif action == 'resize':
             width = int(request.POST.get('width'))
             height = int(request.POST.get('height'))
@@ -83,3 +88,34 @@ def apply_resize(image, width, height):
     # Enregistrer le chemin de l'image redimensionnée dans le modèle
     image.resized_image = resized_image_path
     image.save()
+
+from PIL import Image, ImageFilter
+
+def apply_grayscale_filter(image_obj, filter_type):
+    # Ouvrir l'image
+    with open(image_obj.original_image.path, 'rb') as f:
+        original_image = Image.open(f)
+
+        # Appliquer le filtre en nuances de gris
+        grayscale_image = nuance_de_gris(original_image, ImageFilter.SHARPEN)
+
+        # Créer le répertoire de destination s'il n'existe pas
+        destination_dir = 'images/grayscale'
+        os.makedirs(destination_dir, exist_ok=True)
+
+        # Extraire le nom du fichier original
+        original_image_name = os.path.basename(image_obj.original_image.name)
+
+        # Construire le chemin de destination pour l'image en nuances de gris
+        grayscale_image_path = os.path.join(destination_dir, 'grayscale_' + original_image_name)
+
+        # Enregistrer l'image en nuances de gris
+        grayscale_image.save(grayscale_image_path)
+
+        # Enregistrer le chemin de l'image en nuances de gris dans le modèle
+        image_obj.grayscale_image = grayscale_image_path
+        image_obj.save()
+
+def nuance_de_gris(image, filtre):
+    return image.convert("L", palette=Image.ADAPTIVE, colors=256).filter(filtre)
+
