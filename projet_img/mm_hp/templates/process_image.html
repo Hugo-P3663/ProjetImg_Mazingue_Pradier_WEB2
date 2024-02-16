@@ -6,7 +6,7 @@
     <title>Processed Image</title>
   </head>
   <body>
-    <!-- Affichage des images importées -->
+    <h1>Processed Image</h1></br>
     <h2>Original Images</h2>
     <img
       src="{{ image.original_image1.url }}"
@@ -21,7 +21,17 @@
       height="100"
     />
 
-    <!-- Affichage des images en noir et blanc -->
+    <h3>Download Original Images</h3>
+    <a href="{{ image.original_image1.url }}" download="image1"
+      >Download Image 1</a
+    >
+    <a href="{{ image.original_image2.url }}" download="image2"
+      >Download Image 2</a
+    >
+
+    <p>-------------------------------------------------------------</p>
+    <br />
+
     {% if image.black_and_white_image1 %}
     <h2>Black and White Images</h2>
     <img
@@ -36,9 +46,17 @@
       width="200"
       height="100"
     />
+    <h3>Download Black and White Images</h3>
+    <a href="{{ image.black_and_white_image1.url }}" download="image1"
+      >Download Image 1</a
+    >
+    <a href="{{ image.black_and_white_image2.url }}" download="image2"
+      >Download Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
-    <!-- Affichage de l'image en nuances de gris -->
     {% if image.grayscale_image1 %}
     <h2>Grayscale Images</h2>
     <img
@@ -53,17 +71,33 @@
       width="200"
       height="100"
     />
+    <h3>Download Grayscale Images</h3>
+    <a href="{{ image.grayscale_image1.url }}" download="image1"
+      >Download Image 1</a
+    >
+    <a href="{{ image.grayscale_image2.url }}" download="image2"
+      >Download Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
-    <!-- Affichage de l'image redimensionnée -->
     {% if image.resized_image1 %}
     <h2>Resized Images</h2>
     <img src="{{ image.resized_image1.url }}" alt="Resized Image 1" />
     {% endif %} {% if image.resized_image2 %}
     <img src="{{ image.resized_image2.url }}" alt="Resized Image 2" />
+    <h3>Download Resized Images</h3>
+    <a href="{{ image.resized_image1.url }}" download="image1"
+      >Download Image 1</a
+    >
+    <a href="{{ image.resized_image2.url }}" download="image2"
+      >Download Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
-    <!-- Affichage de l'image fusionnée -->
     {% if image.merged_image %}
     <h2>Merged Image</h2>
     <img
@@ -72,17 +106,37 @@
       width="200"
       height="100"
     />
+    <h3>Download Merged Image</h3>
+    <a href="{{ image.merged_image.url }}" download="merged_image"
+      >Download Merged Image</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
-    <!-- Affichage des images alignées -->
     {% if image.alignment_image %}
     <h2>Alignment Image</h2>
+    <img src="{{ image.alignment_image.url }}" alt="Alignment Image" />
+    <h3>Download Alignment Image</h3>
+    <a href="{{ image.alignment_image.url }}" download="alignment_image"
+      >Download Alignment Image</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
+    {% endif %}
+
+    {% if image.gif_image %}
+    <h2>Gif</h2>
     <img
-      src="{{ image.alignment_image.url }}"
-      alt="Alignment Image"
+      src="{{ image.gif_image.url }}"
+      alt="Gif Image"
       width="200"
       height="100"
     />
+    <h3>Download Gif</h3>
+    <a href="{{ image.gif_image.url }}" download="gif_image">Download Gif</a>
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Formulaire pour effectuer d'autres modifications -->
@@ -99,7 +153,8 @@
         <option value="apply_filter">Apply Filter (Grayscale)</option>
         <option value="resize">Resize</option>
         <option value="merge">Merge Images</option>
-        <option value="alignment">Alignment Images</option></select
+        <option value="alignment">Alignment Images</option>
+        <option value="gif">Gif</option></select
       ><br /><br />
       <label for="filter_type">Choose Grayscale Filter:</label>
       <select name="filter_type" id="filter_type">
@@ -107,10 +162,13 @@
         <option value="FIND_EDGES">Find Edges</option>
         <option value="SHARPEN">Sharpen</option></select
       ><br /><br />
+      <label>For Resize (in px)</label></br>
       <label for="width">Width:</label>
       <input type="text" name="width" id="width" /><br /><br />
       <label for="height">Height:</label>
       <input type="text" name="height" id="height" /><br /><br />
+
+      <label>For Merge ( between 0 and 1 step of 0.1)</label></br>
       <label for="rate">Rate of merge :</label>
       <input type="text" name="rate" id="rate" /><br /><br />
 

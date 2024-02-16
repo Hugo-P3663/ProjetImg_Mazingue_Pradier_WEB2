@@ -4,13 +4,13 @@
     <title>Home</title>
   </head>
   <body>
-    <h2>Accueil</h2>
+    <h2>Home</h2>
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %} {{ form }}
-      <button type="submit">Importer l'image</button>
+      <button type="submit">Import an image</button>
     </form>
 
-    <h2>Listes des images importées</h2>
+    <h2>List of images imported</h2>
 
     {% for image in images %}
     <div>
@@ -29,13 +29,18 @@
         height="100"
       />
       <br />
-      <!-- Affichage de l'ID de l'image et de son lien -->
-      <p>Couple d'image d'id : {{ image.id }}</p>
-      <!-- Lien vers l'image -->
-      <p>Lien 1ère : {{ image.original_image1.url }}</p>
-      <p>Lien 2ème : {{ image.original_image2.url }}</p>
+      <p>Couple of id's image : {{ image.id }}</p>
+      <p>1st Link : {{ image.original_image1.url }}</p>
+      <p>2nd Link : {{ image.original_image2.url }}</p>
       <br />
-      <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
+      <h3>Original Images</h3>
+      <a href="{{ image.original_image1.url }}" download="image1"
+        >Download Image 1</a
+      >
+      <a href="{{ image.original_image2.url }}" download="image2"
+        >Download Image 2</a
+      >
+      <a href="{% url 'process_image' image_id=image.id %}">Process image</a>
       <br />
       <p>-------------------------------------------------------------</p>
     </div>

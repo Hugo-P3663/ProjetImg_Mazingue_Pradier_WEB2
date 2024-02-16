@@ -11,3 +11,4 @@ class ImageModel(models.Model):
     grayscale_image2 = models.ImageField(upload_to='grayscale/', blank=True, null=True)
     merged_image = models.ImageField(upload_to='merged/', blank=True, null=True)
     alignment_image = models.ImageField(upload_to='alignment/', blank=True, null=True)
+    gif_image = models.ImageField(upload_to='gif/', blank=True, null=True)

@@ -4,8 +4,6 @@ from .models import ImageModel
 from PIL import Image, ImageFilter
 import os
 from django.conf import settings
-from django.core.files.base import ContentFile
-from django.conf import settings
 import os
 
 def home(request):
@@ -41,11 +39,11 @@ def process_image(request, image_id):
         elif action == 'alignment':
             alignment_type = str(request.POST.get('alignment_type'))
             apply_alignment(image, alignment_type)
+        elif action == 'gif':
+            gif(image)
 
-        # Rafraîchir les données de l'objet image depuis la base de données après les modifications
         image.refresh_from_db()
 
-    # Envoyer le contexte mis à jour au template
     return render(request, 'process_image.html', {'image': image, 'form': ImageForm()})
 
 
@@ -54,27 +52,19 @@ def apply_black_and_white(image_obj):
         original_image1 = Image.open(f1)
         original_image2 = Image.open(f2)
 
-        # Convertir les deux images en noir et blanc
         black_and_white_image1 = original_image1.convert("1")
         black_and_white_image2 = original_image2.convert("1")
 
-        # Construire le chemin de destination pour les images en noir et blanc
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'bw')
         os.makedirs(destination_dir, exist_ok=True)
 
-        # Extraire le nom du fichier original pour les deux images
         original_image1_name = os.path.basename(image_obj.original_image1.name)
         original_image2_name = os.path.basename(image_obj.original_image2.name)
-
-        # Construire les chemins complets pour les images en noir et blanc
         black_and_white_image1_path = os.path.join(destination_dir, 'bw_' + original_image1_name)
         black_and_white_image2_path = os.path.join(destination_dir, 'bw_' + original_image2_name)
-
-        # Enregistrer les images en noir et blanc
         black_and_white_image1.save(black_and_white_image1_path)
         black_and_white_image2.save(black_and_white_image2_path)
 
-        # Enregistrer les chemins des images en noir et blanc dans le modèle
         image_obj.black_and_white_image1 = 'bw/bw_' + original_image1_name
         image_obj.black_and_white_image2 = 'bw/bw_' + original_image2_name
         image_obj.save()
@@ -84,27 +74,19 @@ def apply_resize(image_obj, width, height):
         original_image1 = Image.open(f1)
         original_image2 = Image.open(f2)
 
-        # Redimensionner les deux images
         resized_image1 = original_image1.resize((width, height))
         resized_image2 = original_image2.resize((width, height))
 
-        # Construire le chemin de destination pour les images redimensionnées
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'resized')
         os.makedirs(destination_dir, exist_ok=True)
 
-        # Extraire le nom du fichier original pour les deux images
         original_image1_name = os.path.basename(image_obj.original_image1.name)
         original_image2_name = os.path.basename(image_obj.original_image2.name)
-
-        # Construire les chemins complets pour les images redimensionnées
         resized_image1_path = os.path.join(destination_dir, 'resized_' + original_image1_name)
         resized_image2_path = os.path.join(destination_dir, 'resized_' + original_image2_name)
-
-        # Enregistrer les images redimensionnées
         resized_image1.save(resized_image1_path)
         resized_image2.save(resized_image2_path)
 
-        # Enregistrer les chemins des images redimensionnées dans le modèle
         image_obj.resized_image1 = 'resized/' + os.path.basename(resized_image1_path)
         image_obj.resized_image2 = 'resized/' + os.path.basename(resized_image2_path)
         image_obj.save()
@@ -115,7 +97,6 @@ def apply_grayscale_filter(image_obj, filter_type):
         original_image1 = Image.open(f1)
         original_image2 = Image.open(f2)
 
-        # Appliquer un filtre de couleur à l'image
         if filter_type == 'BLUR':
             grayscale_image1 = original_image1.filter(ImageFilter.BLUR)
             grayscale_image2 = original_image2.filter(ImageFilter.BLUR)
@@ -141,53 +122,38 @@ def apply_grayscale_filter(image_obj, filter_type):
             grayscale_image1 = original_image1
             grayscale_image2 = original_image2
 
-        # Construire le chemin de destination pour les images en niveaux de gris
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'grayscale')
         os.makedirs(destination_dir, exist_ok=True)
 
-        # Extraire le nom du fichier original pour les deux images
         original_image1_name = os.path.basename(image_obj.original_image1.name)
         original_image2_name = os.path.basename(image_obj.original_image2.name)
-
-        # Construire les chemins complets pour les images en niveaux de gris
         grayscale_image1_path = os.path.join(destination_dir, 'grayscale_' + original_image1_name)
-
         grayscale_image2_path = os.path.join(destination_dir, 'grayscale_' + original_image2_name)
 
-        # Enregistrer les images en niveaux de gris
         grayscale_image1.save(grayscale_image1_path)
         grayscale_image2.save(grayscale_image2_path)
 
-        # Enregistrer les chemins des images en niveaux de gris dans le modèle
         image_obj.grayscale_image1 = 'grayscale/grayscale_' + original_image1_name
         image_obj.grayscale_image2 = 'grayscale/grayscale_' + original_image2_name
         image_obj.save()
-
+        
 def merge_images(image_obj, rate):
     with open(image_obj.original_image1.path, 'rb') as f1, open(image_obj.original_image2.path, 'rb') as f2:
         original_image1 = Image.open(f1)
         original_image2 = Image.open(f2)
 
-        # Resize the second image to match the size of the first image
         original_image2 = original_image2.resize(original_image1.size)
-
-        # Blend the two images
         merged_image = Image.blend(original_image1, original_image2, alpha=rate)
-
-        # Build the destination path for the merged image
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'merged')
         os.makedirs(destination_dir, exist_ok=True)
 
         original_image1_name = os.path.basename(image_obj.original_image1.name)
-        original_image2_name = os.path.basename(image_obj.original_image2.name)
 
-        merged_image_path = os.path.join(destination_dir, 'merged_' + original_image1_name + '_' + original_image2_name)
-
-        # Save the merged image
+        merged_image_name = 'merged' + original_image1_name
+        merged_image_path = os.path.join(destination_dir, merged_image_name)
         merged_image.save(merged_image_path)
 
-        # Save the path of the merged image in the model
-        image_obj.merged_image = 'merged/merged_' + original_image1_name + '_' + original_image2_name
+        image_obj.merged_image = 'merged/' + merged_image_name
         image_obj.save()
         
         
@@ -217,19 +183,43 @@ def apply_alignment(image_obj, direction):
             alignment_image.paste(original_image1, (0, 0))
             alignment_image.paste(original_image2, (original_image1.width, 0))
         
-        # Construire le chemin de destination pour l'alignement des deux images
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'alignment')
         os.makedirs(destination_dir, exist_ok=True)
 
-        # Extraire le nom du fichier original
         original_image1_name = os.path.basename(image_obj.original_image1.name)
 
-        # Construire le chemin complet du fichier aligné
         alignment_image_path = os.path.join(destination_dir, 'alignment_' + original_image1_name)
 
-        # Enregistrer l'image aligné
         alignment_image.save(alignment_image_path)
 
-        # Enregistrer le chemin de l'image aligné dans le modèle
         image_obj.alignment_image = 'alignment/alignment_' + original_image1_name
+        image_obj.save()
+        
+
+
+def gif(image_obj):
+    with open(image_obj.original_image1.path, 'rb') as f1, open(image_obj.original_image2.path, 'rb') as f2:
+        original_image1 = Image.open(f1)
+        original_image2 = Image.open(f2)
+
+        images = [original_image1, original_image2]
+
+        max_width = max(img.width for img in images)
+        max_height = max(img.height for img in images)
+
+        resized_images = [img.resize((max_width, max_height), Image.BICUBIC).convert('RGBA') for img in images]
+        new_image = Image.new('RGBA', (max_width, max_height), (255, 255, 255, 0))
+
+        for img in resized_images:
+            new_image.paste(img, (0, 0), img)
+
+        new_image = new_image.convert('RGB')
+
+        destination_dir = os.path.join(settings.MEDIA_ROOT, 'gif')
+        os.makedirs(destination_dir, exist_ok=True)
+
+        gif_path = os.path.join(destination_dir, 'anim.gif')
+        new_image.save(gif_path, save_all=True, append_images=resized_images, duration=5000, loop=3)
+
+        image_obj.gif_image = 'gif/anim.gif'
         image_obj.save()
