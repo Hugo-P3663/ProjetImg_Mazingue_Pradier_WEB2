@@ -8,12 +8,22 @@
   <body>
     <!-- Affichage de l'image originale -->
     <h2>Original Image</h2>
-    <img src="{{ image.original_image.url }}" alt="Original Image" />
+    <img
+      src="{{ image.original_image.url }}"
+      alt="Original Image"
+      width="200"
+      height="100"
+    />
 
     <!-- Affichage de l'image en nuances de gris -->
     {% if image.grayscale_image %}
     <h2>Grayscale Image</h2>
-    <img src="{{ image.grayscale_image.url }}" alt="Grayscale Image" />
+    <img
+      src="{{ image.grayscale_image.url }}"
+      alt="Grayscale Image"
+      width="200"
+      height="100"
+    />
     {% endif %}
 
     <!-- Affichage de l'image modifiée en noir et blanc -->
@@ -22,6 +32,8 @@
     <img
       src="{{ image.black_and_white_image.url }}"
       alt="Black and White Image"
+      width="200"
+      height="100"
     />
     {% endif %}
 

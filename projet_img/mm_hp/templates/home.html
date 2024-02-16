@@ -12,7 +12,23 @@
 
     {% for image in images %}
     <div>
-      <img src="{{ image.original_image.url }}" alt="Original Image" />
+      <br />
+      <img
+        src="{{ image.original_image.url }}"
+        alt="Original Image"
+        width="200"
+        height="100"
+      />
+      <br />
+      <!-- Affichage de l'ID de l'image et de son lien -->
+      <p>ID de l'image: {{ image.id }}</p>
+      <p>
+        Lien vers l'image:
+        <a href="{{ image.original_image.url }}"
+          >{{ image.original_image.name }}</a
+        >
+      </p>
+      <br />
       <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
     </div>
     {% endfor %}

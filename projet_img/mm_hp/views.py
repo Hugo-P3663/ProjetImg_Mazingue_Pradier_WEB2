@@ -17,8 +17,11 @@ def home(request):
     else:
         form = ImageForm()
 
-    images = ImageModel.objects.all()
+    # Récupérer les images dans l'ordre inverse d'importation
+    images = ImageModel.objects.all().order_by('-id')  # L'ordre décroissant des ID garantit que les dernières images sont affichées en premier
+
     return render(request, 'home.html', {'form': form, 'images': images})
+
 
 def process_image(request, image_id):
     image = ImageModel.objects.get(pk=image_id)
