@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import ImageForm
 from .models import ImageModel
 from PIL import Image, ImageFilter
+import os
 
 def home(request):
     if request.method == 'POST':
@@ -36,9 +37,6 @@ def process_image(request, image_id):
 
     return render(request, 'process_image.html', {'image': image})
 
-
-import os
-
 def apply_black_and_white(image_obj):
     # Ouvrir l'image
     with open(image_obj.original_image.path, 'rb') as f:
@@ -64,9 +62,6 @@ def apply_black_and_white(image_obj):
         image_obj.black_and_white_image = black_and_white_image_path
         image_obj.save()
 
-
-import os
-
 def apply_resize(image, width, height):
     image_path = image.original_image.path
     img = Image.open(image_path)
@@ -88,8 +83,6 @@ def apply_resize(image, width, height):
     # Enregistrer le chemin de l'image redimensionnée dans le modèle
     image.resized_image = resized_image_path
     image.save()
-
-from PIL import Image, ImageFilter
 
 def apply_grayscale_filter(image_obj, filter_type):
     # Ouvrir l'image
@@ -118,4 +111,3 @@ def apply_grayscale_filter(image_obj, filter_type):
 
 def nuance_de_gris(image, filtre):
     return image.convert("L", palette=Image.ADAPTIVE, colors=256).filter(filtre)
-
