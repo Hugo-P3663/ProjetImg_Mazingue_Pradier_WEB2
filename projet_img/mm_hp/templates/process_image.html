@@ -7,46 +7,60 @@
   </head>
   <body>
     <!-- Affichage des images importées -->
-    <h2>Original Image</h2>
+    <h2>Original Images</h2>
     <img
       src="{{ image.original_image1.url }}"
-      alt="Original Image"
+      alt="Original Image 1"
       width="200"
       height="100"
     />
     <img
       src="{{ image.original_image2.url }}"
-      alt="Original Image"
+      alt="Original Image 2"
       width="200"
       height="100"
     />
 
-    <!-- Affichage de l'image en nuances de gris -->
-    {% if image.grayscale_image %}
-    <h2>Grayscale Image</h2>
+    <!-- Affichage des images en noir et blanc -->
+    {% if image.black_and_white_image1 %}
+    <h2>Black and White Images</h2>
     <img
-      src="{{ image.grayscale_image.url }}"
-      alt="Grayscale Image"
+      src="{{ image.black_and_white_image1.url }}"
+      alt="Black and White Image 1"
+      width="200"
+      height="100"
+    />
+    <img
+      src="{{ image.black_and_white_image2.url }}"
+      alt="Black and White Image 2"
       width="200"
       height="100"
     />
     {% endif %}
 
-    <!-- Affichage de l'image modifiée en noir et blanc -->
-    {% if image.black_and_white_image %}
-    <h2>Black and White Image</h2>
+    <!-- Affichage de l'image en nuances de gris -->
+    {% if image.grayscale_image1 %}
+    <h2>Grayscale Images</h2>
     <img
-      src="{{ image.black_and_white_image.url }}"
-      alt="Black and White Image"
+      src="{{ image.grayscale_image1.url }}"
+      alt="Grayscale Image 1"
+      width="200"
+      height="100"
+    />
+    <img
+      src="{{ image.grayscale_image2.url }}"
+      alt="Grayscale Image 2"
       width="200"
       height="100"
     />
     {% endif %}
 
     <!-- Affichage de l'image redimensionnée -->
-    {% if image.resized_image %}
-    <h2>Resized Image</h2>
-    <img src="{{ image.resized_image.url }}" alt="Resized Image" />
+    {% if image.resized_image1 %}
+    <h2>Resized Images</h2>
+    <img src="{{ image.resized_image1.url }}" alt="Resized Image 1" />
+    {% endif %} {% if image.resized_image2 %}
+    <img src="{{ image.resized_image2.url }}" alt="Resized Image 2" />
     {% endif %}
 
     <!-- Affichage de l'image fusionnée -->
