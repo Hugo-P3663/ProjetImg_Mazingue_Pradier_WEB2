@@ -43,15 +43,31 @@
     <img src="{{ image.resized_image.url }}" alt="Resized Image" />
     {% endif %}
 
+    <!-- Affichage de l'image fusionnée -->
+    {% if image.merged_image %}
+    <h2>Merged Image</h2>
+    <img
+      src="{{ image.merged_image.url }}"
+      alt="Merged Image"
+      width="200"
+      height="100"
+    />
+    {% endif %}
+
     <!-- Formulaire pour effectuer d'autres modifications -->
     <h2>Modify Image</h2>
-    <form action="{% url 'process_image' image_id=image.id %}" method="post">
+    <form
+      action="{% url 'process_image' image_id=image.id %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
       {% csrf_token %}
       <label for="action">Choose Action:</label>
       <select name="action" id="action">
         <option value="convert_bw">Convert to Black and White</option>
         <option value="apply_filter">Apply Filter (Grayscale)</option>
-        <option value="resize">Resize</option></select
+        <option value="resize">Resize</option>
+        <option value="merge">Merge Images</option></select
       ><br /><br />
       <label for="filter_type">Choose Grayscale Filter:</label>
       <select name="filter_type" id="filter_type">
@@ -64,6 +80,20 @@
       <label for="height">Height:</label>
       <input type="text" name="height" id="height" /><br /><br />
       <input type="submit" value="Apply Changes" />
+    </form>
+
+    <!-- Form for merging images -->
+    <h2>Merge Images</h2>
+    <form
+      action="{% url 'process_image' image_id=image.id %}"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="action" value="merge" />
+      <input type="file" name="original_image1" accept="image/*" /><br />
+      <input type="file" name="original_image2" accept="image/*" /><br />
+      <input type="submit" value="Merge Images" />
     </form>
   </body>
 </html>

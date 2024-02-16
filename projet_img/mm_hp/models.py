@@ -1,7 +1,9 @@
 from django.db import models
 
 class ImageModel(models.Model):
-    original_image = models.ImageField(upload_to='original/')  # Mettez 'original/' au lieu de 'images/original/'
+    original_image1 = models.ImageField(upload_to='original/')
+    original_image2 = models.ImageField(upload_to='original/')
     black_and_white_image = models.ImageField(upload_to='blackAndWhite/', blank=True, null=True)
     resized_image = models.ImageField(upload_to='resize/', blank=True, null=True)
     grayscale_image = models.ImageField(upload_to='grayscale/', blank=True, null=True)
+    merged_image = models.ImageField(upload_to='merged/', blank=True, null=True)
