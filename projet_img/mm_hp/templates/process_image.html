@@ -21,6 +21,17 @@
       height="100"
     />
 
+    <h3>Télécharger Original Images</h3>
+    <a href="{{ image.original_image1.url }}" download="image1"
+      >Télécharger Image 1</a
+    >
+    <a href="{{ image.original_image2.url }}" download="image2"
+      >Télécharger Image 2</a
+    >
+
+    <p>-------------------------------------------------------------</p>
+    <br />
+
     <!-- Affichage des images en noir et blanc -->
     {% if image.black_and_white_image1 %}
     <h2>Black and White Images</h2>
@@ -36,6 +47,15 @@
       width="200"
       height="100"
     />
+    <h3>Télécharger Black and White Images</h3>
+    <a href="{{ image.black_and_white_image1.url }}" download="image1"
+      >Télécharger Image 1</a
+    >
+    <a href="{{ image.black_and_white_image2.url }}" download="image2"
+      >Télécharger Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Affichage de l'image en nuances de gris -->
@@ -53,6 +73,15 @@
       width="200"
       height="100"
     />
+    <h3>Télécharger Grayscale Images</h3>
+    <a href="{{ image.grayscale_image1.url }}" download="image1"
+      >Télécharger Image 1</a
+    >
+    <a href="{{ image.grayscale_image2.url }}" download="image2"
+      >Télécharger Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Affichage de l'image redimensionnée -->
@@ -61,6 +90,15 @@
     <img src="{{ image.resized_image1.url }}" alt="Resized Image 1" />
     {% endif %} {% if image.resized_image2 %}
     <img src="{{ image.resized_image2.url }}" alt="Resized Image 2" />
+    <h3>Télécharger Resized Images</h3>
+    <a href="{{ image.resized_image1.url }}" download="image1"
+      >Télécharger Image 1</a
+    >
+    <a href="{{ image.resized_image2.url }}" download="image2"
+      >Télécharger Image 2</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Affichage de l'image fusionnée -->
@@ -72,6 +110,12 @@
       width="200"
       height="100"
     />
+    <h3>Télécharger Merged Image</h3>
+    <a href="{{ image.merged_image.url }}" download="merged_image"
+      >Télécharger Merged Image</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Affichage des images alignées -->
@@ -83,6 +127,12 @@
       width="200"
       height="100"
     />
+    <h3>Télécharger Alignment Image</h3>
+    <a href="{{ image.alignment_image.url }}" download="alignment_image"
+      >Télécharger Alignment Image</a
+    >
+    <p>-------------------------------------------------------------</p>
+    <br />
     {% endif %}
 
     <!-- Formulaire pour effectuer d'autres modifications -->

@@ -35,6 +35,13 @@
       <p>Lien 1ère : {{ image.original_image1.url }}</p>
       <p>Lien 2ème : {{ image.original_image2.url }}</p>
       <br />
+      <h3>Télécharger Original Images</h3>
+      <a href="{{ image.original_image1.url }}" download="image1"
+        >Télécharger Image 1</a
+      >
+      <a href="{{ image.original_image2.url }}" download="image2"
+        >Télécharger Image 2</a
+      >
       <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
       <br />
       <p>-------------------------------------------------------------</p>
