@@ -6,10 +6,16 @@
     <title>Processed Image</title>
   </head>
   <body>
-    <!-- Affichage de l'image originale -->
+    <!-- Affichage des images importées -->
     <h2>Original Image</h2>
     <img
-      src="{{ image.original_image.url }}"
+      src="{{ image.original_image1.url }}"
+      alt="Original Image"
+      width="200"
+      height="100"
+    />
+    <img
+      src="{{ image.original_image2.url }}"
       alt="Original Image"
       width="200"
       height="100"
@@ -80,20 +86,6 @@
       <label for="height">Height:</label>
       <input type="text" name="height" id="height" /><br /><br />
       <input type="submit" value="Apply Changes" />
-    </form>
-
-    <!-- Form for merging images -->
-    <h2>Merge Images</h2>
-    <form
-      action="{% url 'process_image' image_id=image.id %}"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %}
-      <input type="hidden" name="action" value="merge" />
-      <input type="file" name="original_image1" accept="image/*" /><br />
-      <input type="file" name="original_image2" accept="image/*" /><br />
-      <input type="submit" value="Merge Images" />
     </form>
   </body>
 </html>

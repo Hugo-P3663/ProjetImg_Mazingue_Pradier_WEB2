@@ -22,18 +22,22 @@
         height="100"
       />
       <br />
+      <img
+        src="{{ image.original_image2.url }}"
+        alt="Original Image {{ forloop.counter }}"
+        width="200"
+        height="100"
+      />
+      <br />
       <!-- Affichage de l'ID de l'image et de son lien -->
-      <p>ID de l'image: {{ image.id }}</p>
+      <p>Couple d'image d'id : {{ image.id }}</p>
       <!-- Lien vers l'image -->
-      <p>Lien : {{ image.original_image.url }}</p>
+      <p>Lien 1ère : {{ image.original_image1.url }}</p>
+      <p>Lien 2ème : {{ image.original_image2.url }}</p>
       <br />
       <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
-
       <br />
-
-      <p>
-        -------------------------------------------------------------------------------------------------------------------------------------------------
-      </p>
+      <p>-------------------------------------------------------------</p>
     </div>
     {% endfor %}
   </body>
