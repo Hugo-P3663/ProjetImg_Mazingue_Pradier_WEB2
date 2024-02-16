@@ -3,6 +3,10 @@ from .forms import ImageForm
 from .models import ImageModel
 from PIL import Image, ImageFilter
 import os
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.conf import settings
+import os
 
 def home(request):
     if request.method == 'POST':
@@ -38,75 +42,69 @@ def process_image(request, image_id):
     return render(request, 'process_image.html', {'image': image})
 
 def apply_black_and_white(image_obj):
-    # Ouvrir l'image
     with open(image_obj.original_image.path, 'rb') as f:
         original_image = Image.open(f)
-
-        # Convertir l'image en noir et blanc
         black_and_white_image = original_image.convert('L')
 
-        # Créer le répertoire de destination s'il n'existe pas
-        destination_dir = 'images/bw'
+        # Construire le chemin de destination pour l'image en noir et blanc
+        destination_dir = os.path.join(settings.MEDIA_ROOT, 'bw')
         os.makedirs(destination_dir, exist_ok=True)
 
         # Extraire le nom du fichier original
         original_image_name = os.path.basename(image_obj.original_image.name)
 
-        # Construire le chemin de destination pour l'image en noir et blanc
+        # Construire le chemin complet du fichier en noir et blanc
         black_and_white_image_path = os.path.join(destination_dir, 'bw_' + original_image_name)
 
         # Enregistrer l'image en noir et blanc
         black_and_white_image.save(black_and_white_image_path)
 
         # Enregistrer le chemin de l'image en noir et blanc dans le modèle
-        image_obj.black_and_white_image = black_and_white_image_path
+        image_obj.black_and_white_image = 'bw/bw_' + original_image_name
         image_obj.save()
 
+
 def apply_resize(image, width, height):
-    image_path = image.original_image.path
-    img = Image.open(image_path)
+    img = Image.open(image.original_image.path)
     resized_image = img.resize((width, height))
 
-    # Créer le répertoire de destination s'il n'existe pas
-    destination_dir = 'images/resized'
+    # Construire le chemin de destination pour l'image redimensionnée
+    destination_dir = os.path.join(settings.MEDIA_ROOT, 'resized')
     os.makedirs(destination_dir, exist_ok=True)
 
     # Extraire le nom du fichier original
     original_image_name = os.path.basename(image.original_image.name)
 
-    # Construire le chemin de destination pour l'image redimensionnée
+    # Construire le chemin complet du fichier redimensionné
     resized_image_path = os.path.join(destination_dir, 'resized_' + original_image_name)
 
     # Enregistrer l'image redimensionnée
     resized_image.save(resized_image_path)
 
     # Enregistrer le chemin de l'image redimensionnée dans le modèle
-    image.resized_image = resized_image_path
+    image.resized_image = 'resized/resized_' + original_image_name
     image.save()
 
 def apply_grayscale_filter(image_obj, filter_type):
-    # Ouvrir l'image
     with open(image_obj.original_image.path, 'rb') as f:
         original_image = Image.open(f)
-
-        # Appliquer le filtre en nuances de gris
         grayscale_image = nuance_de_gris(original_image, ImageFilter.SHARPEN)
 
-        # Créer le répertoire de destination s'il n'existe pas
-        destination_dir = 'images/grayscale'
+        # Construire le chemin de destination pour l'image en nuances de gris
+        destination_dir = os.path.join(settings.MEDIA_ROOT, 'grayscale')
         os.makedirs(destination_dir, exist_ok=True)
 
         # Extraire le nom du fichier original
         original_image_name = os.path.basename(image_obj.original_image.name)
 
-        # Construire le chemin de destination pour l'image en nuances de gris
+        # Construire le chemin complet du fichier en nuances de gris
         grayscale_image_path = os.path.join(destination_dir, 'grayscale_' + original_image_name)
 
         # Enregistrer l'image en nuances de gris
         grayscale_image.save(grayscale_image_path)
 
         # Enregistrer le chemin de l'image en nuances de gris dans le modèle
-        image_obj.grayscale_image = grayscale_image_path
+        image_obj.grayscale_image = 'grayscale/grayscale_' + original_image_name
         image_obj.save()
 
 def nuance_de_gris(image, filtre):
