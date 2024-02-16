@@ -10,6 +10,8 @@
       <button type="submit">Importer l'image</button>
     </form>
 
+    <h2>Listes des images importées</h2>
+
     {% for image in images %}
     <div>
       <br />
@@ -22,14 +24,16 @@
       <br />
       <!-- Affichage de l'ID de l'image et de son lien -->
       <p>ID de l'image: {{ image.id }}</p>
-      <p>
-        Lien vers l'image:
-        <a href="{{ image.original_image.url }}"
-          >{{ image.original_image.name }}</a
-        >
-      </p>
+      <!-- Lien vers l'image -->
+      <p>Lien : {{ image.original_image.url }}</p>
       <br />
       <a href="{% url 'process_image' image_id=image.id %}">Traiter l'image</a>
+
+      <br />
+
+      <p>
+        -------------------------------------------------------------------------------------------------------------------------------------------------
+      </p>
     </div>
     {% endfor %}
   </body>
