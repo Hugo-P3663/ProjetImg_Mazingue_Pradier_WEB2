@@ -36,7 +36,11 @@ def process_image(request, image_id):
             height = int(request.POST.get('height'))
             apply_resize(image, width, height)
         elif action == 'merge':
-            merge_images(image)
+            rate = float(request.POST.get('rate'))
+            merge_images(image, rate)
+        elif action == 'alignment':
+            alignment_type = str(request.POST.get('alignment_type'))
+            apply_alignment(image, alignment_type)
 
         # Rafraîchir les données de l'objet image depuis la base de données après les modifications
         image.refresh_from_db()
@@ -51,8 +55,8 @@ def apply_black_and_white(image_obj):
         original_image2 = Image.open(f2)
 
         # Convertir les deux images en noir et blanc
-        black_and_white_image1 = original_image1.convert('L')
-        black_and_white_image2 = original_image2.convert('L')
+        black_and_white_image1 = original_image1.convert("1")
+        black_and_white_image2 = original_image2.convert("1")
 
         # Construire le chemin de destination pour les images en noir et blanc
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'bw')
@@ -159,7 +163,7 @@ def apply_grayscale_filter(image_obj, filter_type):
         image_obj.grayscale_image2 = 'grayscale/grayscale_' + original_image2_name
         image_obj.save()
 
-def merge_images(image_obj):
+def merge_images(image_obj, rate):
     with open(image_obj.original_image1.path, 'rb') as f1, open(image_obj.original_image2.path, 'rb') as f2:
         original_image1 = Image.open(f1)
         original_image2 = Image.open(f2)
@@ -168,7 +172,7 @@ def merge_images(image_obj):
         original_image2 = original_image2.resize(original_image1.size)
 
         # Blend the two images
-        merged_image = Image.blend(original_image1, original_image2, alpha=0.5)
+        merged_image = Image.blend(original_image1, original_image2, alpha=rate)
 
         # Build the destination path for the merged image
         destination_dir = os.path.join(settings.MEDIA_ROOT, 'merged')
@@ -184,4 +188,48 @@ def merge_images(image_obj):
 
         # Save the path of the merged image in the model
         image_obj.merged_image = 'merged/merged_' + original_image1_name + '_' + original_image2_name
+        image_obj.save()
+        
+        
+        
+def apply_alignment(image_obj, direction):
+    with open(image_obj.original_image1.path, 'rb') as f1, open(image_obj.original_image2.path, 'rb') as f2:
+        original_image1 = Image.open(f1)
+        original_image2 = Image.open(f2)
+
+        if direction == "VERTICAL":
+            if original_image1.width != original_image2.width:
+                original_image2 = original_image2.resize((original_image1.width, original_image2.height))
+                
+            total_width = max(original_image1.width, original_image2.width)
+            total_height = original_image1.height + original_image2.height
+            alignment_image = Image.new('RGB', (total_width, total_height), "white")
+            alignment_image.paste(original_image1, (0, 0))
+            alignment_image.paste(original_image2, (0, original_image1.height))
+            
+        elif direction == "HORIZONTAL":
+            if original_image1.height != original_image2.height:
+                original_image2 = original_image2.resize((original_image2.width, original_image1.height))
+                
+            total_width = original_image1.width + original_image2.width
+            total_height = max(original_image1.height, original_image2.height)
+            alignment_image = Image.new('RGB', (total_width, total_height), "white")
+            alignment_image.paste(original_image1, (0, 0))
+            alignment_image.paste(original_image2, (original_image1.width, 0))
+        
+        # Construire le chemin de destination pour l'alignement des deux images
+        destination_dir = os.path.join(settings.MEDIA_ROOT, 'alignment')
+        os.makedirs(destination_dir, exist_ok=True)
+
+        # Extraire le nom du fichier original
+        original_image1_name = os.path.basename(image_obj.original_image1.name)
+
+        # Construire le chemin complet du fichier aligné
+        alignment_image_path = os.path.join(destination_dir, 'alignment_' + original_image1_name)
+
+        # Enregistrer l'image aligné
+        alignment_image.save(alignment_image_path)
+
+        # Enregistrer le chemin de l'image aligné dans le modèle
+        image_obj.alignment_image = 'alignment/alignment_' + original_image1_name
         image_obj.save()

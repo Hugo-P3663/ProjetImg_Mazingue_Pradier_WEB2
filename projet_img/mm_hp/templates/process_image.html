@@ -74,6 +74,17 @@
     />
     {% endif %}
 
+    <!-- Affichage des images alignées -->
+    {% if image.alignment_image %}
+    <h2>Alignment Image</h2>
+    <img
+      src="{{ image.alignment_image.url }}"
+      alt="Alignment Image"
+      width="200"
+      height="100"
+    />
+    {% endif %}
+
     <!-- Formulaire pour effectuer d'autres modifications -->
     <h2>Modify Image</h2>
     <form
@@ -87,18 +98,27 @@
         <option value="convert_bw">Convert to Black and White</option>
         <option value="apply_filter">Apply Filter (Grayscale)</option>
         <option value="resize">Resize</option>
-        <option value="merge">Merge Images</option></select
+        <option value="merge">Merge Images</option>
+        <option value="alignment">Alignment Images</option></select
       ><br /><br />
       <label for="filter_type">Choose Grayscale Filter:</label>
       <select name="filter_type" id="filter_type">
-        <option value="SHARPEN">Sharpen</option>
         <option value="EMBOSS">Emboss</option>
-        <option value="FIND_EDGES">Find Edges</option></select
+        <option value="FIND_EDGES">Find Edges</option>
+        <option value="SHARPEN">Sharpen</option></select
       ><br /><br />
       <label for="width">Width:</label>
       <input type="text" name="width" id="width" /><br /><br />
       <label for="height">Height:</label>
       <input type="text" name="height" id="height" /><br /><br />
+      <label for="rate">Rate of merge :</label>
+      <input type="text" name="rate" id="rate" /><br /><br />
+
+      <label for="alignment_type">Choose Type of Alignment:</label>
+      <select name="alignment_type" id="alignment_type">
+        <option value="VERTICAL">VERTICAL</option>
+        <option value="HORIZONTAL">HORIZONTAL</option></select
+      ><br /><br />
       <input type="submit" value="Apply Changes" />
     </form>
   </body>
