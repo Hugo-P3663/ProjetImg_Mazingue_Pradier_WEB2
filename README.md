@@ -1,4 +1,3 @@
-# Comment lancer le projet :
 # Projet Image, Son et Visualisation
 
 _Hugo PRADIER et Matis MAZINGUE WEB2_
